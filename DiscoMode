@@ -1,0 +1,227 @@
+/**
+ *  Copyright 2015 SmartThings
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ */
+
+
+//THIS SWITCH IS STATELESS (YOU CAN TRIGGER CONSECUTIVE ON/OFF COMMANDS)
+
+metadata {
+
+    definition (name: "Disco Mode", namespace: "racarmichael", author: "Ryan Carmichael",
+    //Set device icon as "Light" (https://github.com/Samsung/SmartThings/blob/master/internal/rules/device_type_table.md)
+    ocfDeviceType: " oic.d.light "
+    ) {
+        capability "Switch"
+        capability "Switch Level" 
+        command "statusOn"
+        command "statusOff"
+        command "sendCommand", ["string"]
+        command "sendCommandMessage", ["string", "string"]
+        
+        preferences {
+            input(name: "deviceIP", type: "string", title:"AutoRemote Device IP Address", description: "", required: true, displayDuringSetup: true)
+            input(name: "customCommand", type: "string", title:"Default Command to Send", description: "ex: {command}=:=on", displayDuringSetup: true)
+        }
+    }
+    
+    //Icons (http://htmlpreview.github.io/?https://github.com/krlaframboise/Resources/blob/master/SmartThings-Icons.html)
+
+    tiles {
+        standardTile("switch", "device.switch", width: 2, height: 2, canChangeIcon: true) {
+        
+            //OFF
+            state "off", label: '${currentValue}', action: "switch.on", 
+            //OFF ICON
+            icon: "st.secondary.off", 
+            backgroundColor: "#ffffff"
+            
+            //ON
+            state "on", label: '${currentValue}', action: "switch.off", 
+            //ON ICON
+            icon: " st.Entertainment.entertainment3", 
+            backgroundColor: "#00A0DC"
+
+            //OFF STATELESS
+            state "turning off", label: '${currentValue}', action: "switch.on", 
+            //OFF ICON
+            icon: "st.secondary.off", 
+            backgroundColor: "#ffffff"
+            
+            //ON STATELESS
+            state "turning on", label: '${currentValue}', action: "switch.off", 
+            //ON ICON
+            icon: " st.Entertainment.entertainment3", 
+            backgroundColor: "#00A0DC"
+  
+        }
+        
+        standardTile("switchLevel", "device.level", width: 2, height: 2, canChangeIcon: true) {
+        
+            //OFF 2
+            state "off2", label: '${currentValue}', action: "switchLevel.0", 
+            //OFF ICON
+            icon: "st.secondary.off", 
+            backgroundColor: "#ffffff"
+            
+            //ON 2
+            state "on2", label: '${currentValue}', action: "switchLevel.100", 
+            //ON ICON
+            icon: " st.Entertainment.entertainment3", 
+            backgroundColor: "#00A0DC"
+  
+        }
+        
+        //ON
+		standardTile("off", "device.off", width:1, height:1, decoration: "flat") {
+			state("off", action: "switch.on", 
+            //ON ICON
+            icon: "st.Entertainment.entertainment7")
+			state "false", label: ''
+		}
+        
+		//OFF
+        standardTile("on", "device.on", width:1, height:1, decoration: "flat") {
+			state("on", action: "switch.off", 
+            //OFF ICON
+            icon: "st.secondary.off")
+			state "false", label: ''
+		}
+        
+                controlTile("levelSliderControl", "device.level", "slider", height: 1, width: 3, inactiveLabel: false, backgroundColor:"#ffe71e") {
+            state "level", action:"switch level.setLevel"
+        }
+
+		main("switch")
+        
+		details( ["switch", "off", "on", "levelSliderControl"] )
+        
+    }
+    
+    
+}
+
+def parse(description) {
+}
+
+
+def installed() {
+    log.trace "Executing 'installed'"
+    initialize()
+    off()
+}
+
+def updated() {
+    log.trace "Executing 'updated'"
+    initialize()
+}
+
+private initialize() {
+    log.trace "Executing 'initialize'"
+}
+
+def statusOn(){
+    log.debug "Updating the status to 'on' without sending network command"
+    on(false)
+}
+
+def statusOff(){
+    log.debug "Updating the status to 'off' without sending network command"
+    off(false)
+}
+
+
+def on() {
+    sendEvent(name: "switch", value: "turning on")
+    sendEvent(name: "switch", value: "on")
+    //ALSO NEXT DISCO MODE
+sendCustomCommand("4D00")
+}
+
+def off() {
+    sendEvent(name: "switch", value: "turning off")
+    sendEvent(name: "switch", value: "off")
+    //WHITE
+sendCustomCommand("C200")    
+}
+
+def setLevel(val){
+    log.info "setLevel $val"
+    
+    if (val < 0) val = 0
+    else if( val > 100) val = 100
+    
+    //SLOWER
+    if (val < 50) sendCustomCommand("4300")
+    //FASTER
+    else if (val > 50) sendCustomCommand("4400")
+    
+//RETURN VALUE TO NEUTRAL
+    if (val < 50) val = 50
+    else if( val > 50) val = 50
+
+
+    sendEvent(name: "level", value: val)    
+    }
+
+
+
+
+def sendCommand(command){
+    log.debug "Sending command: ${command}"
+    sendARCommand(command)
+}
+
+def sendCommandMessage(command, message){
+    log.debug "Sending command with message: ${command}=:=${message}"
+    sendARCommand("${command}=:=${message}")
+}
+
+def sendCustomCommand(command){
+    log.debug "Sending default custom command: ${customCommand}=:=${command}"
+    
+    sendARCommand("${customCommand}=:=${command}")
+    
+}
+
+def sendARCommand(command){
+	if(isHubitat){
+        //Hubitat approach
+        def params = ["uri": "http://${deviceIP}:1817/?message=${command}"]
+        def data = ["command": command]
+        asynchttpGet(hubitatCallback, params, data)
+        log.debug "Sent async HTTP get"
+    }
+    
+    //SmartThings Approach
+    def result = new physicalgraph.device.HubAction(
+        method: "GET", 
+        path: "/?message=${command}", 
+        headers: [ HOST: "${deviceIP}:1817"], 
+        null, 
+        [callback: smartthingsCallback]
+    )
+    log.debug "Sending HTTP GET..."
+    sendHubCommand(result) 
+}
+
+def smartthingsCallback(response){
+	log.debug "AutoRemote HTTP GET Response is: ${response.body}"
+}
+
+def hubitatCallback(response, data){
+    log.debug "Request to turn ${data['command']} ${response.hasError() ? 'FAILED' : 'SUCCEEDED'} with status ${response.getStatus()}"
+}
+
+def getIsHubitat(){
+	return false; //hardcode it for now - we can make it dynamic and merge the SmartThings DTH and Hubitat driver together
+}
