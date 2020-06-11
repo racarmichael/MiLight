@@ -1,19 +1,13 @@
 /**
- *  Copyright 2017-2018 SmartThings
  *
- *  Device Handler for a simulated mixed-mode RGBW and Tunable White light bulb
+ *  Device Handler for a MiLight/LimitlessLED/EasyBulb RGBW light bulb (via AutoRemote)
+ *  https://github.com/racarmichael/MiLight
+ *  
+ *  Special thanks to @joshualyon from SharpTools for the code from the original "AutoRemote DTH"
+ *  https://gist.github.com/joshualyon/bd6a42c07715bb24db0a31812d4391ad
  *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License. You may obtain a copy of the License at:
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
- *  for the specific language governing permissions and limitations under the License.
- *
- *  Author: SmartThings
- *  Date: 2017-10-09
+ *  Also a thank you to the SmartThings community for the "Simulated RGBW Bulb" DTH
+ *  https://github.com/SmartThingsCommunity/SmartThingsPublic/tree/master/devicetypes/smartthings/testing/simulated-rgbw-bulb.src
  *
  */
 import groovy.transform.Field
@@ -72,7 +66,8 @@ metadata {
         
         preferences {
             input(name: "deviceIP", type: "string", title:"AutoRemote Device IP Address", description: "", required: true, displayDuringSetup: true)
-            input(name: "customCommand", type: "string", title:"Device Name", description: "ex: {command}=:=on", displayDuringSetup: true)
+            input(name: "customCommand", type: "string", title:"Device Name", description: "ex: {Group}_{DeviceName}=:=0000", displayDuringSetup: true)
+            input(name: "groupNum", type: "string", title:"Group Number", description: "ex: 1,2,3, or 4 - 0 for all", displayDuringSetup: true)
         }
     }
 
@@ -350,7 +345,11 @@ def configure() {
 def on() {
     log.trace "Executing 'on'"
     
-    sendCustomCommand("4200")
+         if (groupNum == "1") sendCustomCommand("4500")
+    else if (groupNum == "2") sendCustomCommand("4700")
+    else if (groupNum == "3") sendCustomCommand("4900")
+    else if (groupNum == "4") sendCustomCommand("4B00")
+    else    sendCustomCommand("4200") //ALL GROUPS
     
     sendEvent(name: "switch", value: "turningOn")
     
@@ -363,7 +362,11 @@ def on() {
 def off() {
     log.trace "Executing 'off'"
     
-    sendCustomCommand("4100")
+         if (groupNum == "1") sendCustomCommand("4600")
+    else if (groupNum == "2") sendCustomCommand("4800")
+    else if (groupNum == "3") sendCustomCommand("4A00")
+    else if (groupNum == "4") sendCustomCommand("4C00")
+    else    sendCustomCommand("4100") //ALL GROUPS
     
     sendEvent(name: "switch", value: "turningOff")
     
@@ -386,7 +389,7 @@ def sendCommandMessage(command, message){
 def sendCustomCommand(command){
     log.debug "Sending default custom command: ${customCommand}=:=${command}"
     
-    sendARCommand("${customCommand}=:=${command}")
+    sendARCommand("GR${groupNum}_${customCommand}=:=${command}")
     
 }
 
@@ -653,10 +656,17 @@ private void simulateBulbState(String mode) {
     log.debug "bulbMode: $mode; bulbValue: $valueText; colorIndicator: $colorIndicator"
     sendEvent(name: "colorIndicator", value: colorIndicator)
     sendEvent(name: "bulbMode", value: mode)
-    sendEvent(name: "bulbValue", value: valueText)
+    sendEvent(name: "bulbValue", value: valueText)    
     
     if (colorIndicator == 0) wait(1) //DO NOTHING
-    else if (colorIndicator < 99999) sendCustomCommand("C200") //WHITE
+    
+    //WHITE
+    else if (colorIndicator < 99999 && groupNum == "1") sendCustomCommand("C500") 
+    else if (colorIndicator < 99999 && groupNum == "2") sendCustomCommand("C700")
+    else if (colorIndicator < 99999 && groupNum == "3") sendCustomCommand("C900")
+    else if (colorIndicator < 99999 && groupNum == "4") sendCustomCommand("CB00")
+    else if (colorIndicator < 99999) sendCustomCommand("C200") //ALL GROUPS
+    
     else if (colorIndicator < 101100) sendCustomCommand("40AF")
     else if (colorIndicator < 102050) sendCustomCommand("40AE")
     else if (colorIndicator < 102100) sendCustomCommand("40AD")
