@@ -1,0 +1,29 @@
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<html>
+<head>
+</head>
+<body>
+1590052327500 true 1591752987121 8 50 true 51 AutoRemote <time>-1 -1 2 60 -1 -1 </time>
+1591752865556 true 1591854371607 8 8 20 MiLight AR Bulb <code>1015828216</code> 0 RyansRoomLX java.lang.String &lt;null&gt; java.lang.String RyansRoomLX java.lang.String false java.lang.Boolean false java.lang.Boolean false java.lang.Boolean &lt;null&gt; java.lang.String
+ true java.lang.Boolean 0 java.lang.Integer message plugininstanceid plugintypeid java.lang.String true java.lang.Boolean 058b90df-b04c-4819-950c-ace7c5c7009d java.lang.String com.joaomgcd.autoremote.IntentRemoteEvent java.lang.String &lt;null&gt; java.lang.String
+ com.joaomgcd.autoremote com.joaomgcd.autoremote.activity.ActivityConfigConditionTaskerEvent 1563431102712 Mi-Light 50,8 51,2,20
+<img blockedImageSrc> md5996e59bb8c2e2392979f1e822cf6b0ad.Activity_Splashscreen mi_light.mi_light 1563420232021 1591856111735 2 WifiBox 100
+<code>547</code> %MiLIP 192.168.1.100 <code>547</code> %MiLPort 8899 <img blockedImageSrc> md5996e59bb8c2e2392979f1e822cf6b0ad.Activity_Splashscreen mi_light.mi_light 1591750771840 1591856117383 20 MiLight AR Bulb 6 2 true
+<code>37</code> And And And And And And And And And %arcomm 1 4100 %arcomm 1 4200 %arcomm 1 4500 %arcomm 1 4600 %arcomm 1 4700 %arcomm 1 4800 %arcomm 1 4900 %arcomm 1 4A00 %arcomm 1 4B00 %arcomm 1 4C00
+<code>877</code> android.intent.action.SENDTO udp://%MiLIP:%MiLPort/0x4500 %armessage 2 GR1_*
+<code>877</code> android.intent.action.SENDTO udp://%MiLIP:%MiLPort/0x4700 %armessage 2 GR2_*
+<code>877</code> android.intent.action.SENDTO udp://%MiLIP:%MiLPort/0x4900 %armessage 2 GR3_*
+<code>877</code> android.intent.action.SENDTO udp://%MiLIP:%MiLPort/0x4B00 %armessage 2 GR4_*
+<code>877</code> <label>ALL GROUPS</label> android.intent.action.SENDTO udp://%MiLIP:%MiLPort/0x4200 And And And %armessage 3 GR1_* %armessage 3 GR2_* %armessage 3 GR3_* %armessage 2 GR4_*
+<code>30</code> <code>38</code> <code>877</code> android.intent.action.SENDTO udp://%MiLIP:%MiLPort/0x%arcomm 1590052340469 1591856114459 51 AutoRemote 100
+<code>785392305</code> &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String false java.lang.Boolean false java.lang.Boolean Stopping Wifi Service java.lang.String false
+ java.lang.Boolean &lt;StringArray sr=&quot;&quot;&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;%err Error Code Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;%errmsg
+ Error Message Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;&lt;/StringArray&gt; [Ljava.lang.String; plugininstanceid plugintypeid java.lang.String
+ true java.lang.Boolean ae866678-f44b-4b77-bf66-17e5a122f985 java.lang.String com.joaomgcd.autoremote.IntentWifiService java.lang.String com.joaomgcd.autoremote com.joaomgcd.autoremote.activity.ActivityConfigWifiService
+<code>785392305</code> &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String &lt;null&gt; java.lang.String true java.lang.Boolean true java.lang.Boolean Starting Wifi Service Persistent Notification:
+ true Keep Awake: true java.lang.String true java.lang.Boolean &lt;StringArray sr=&quot;&quot;&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;%err Error Code Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES0&gt;&lt;_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;%errmsg
+ Error Message Only available if you select &amp;lt;b&amp;gt;Continue Task After Error&amp;lt;/b&amp;gt; and the action ends in error&lt;/_array_net.dinglisch.android.tasker.RELEVANT_VARIABLES1&gt;&lt;/StringArray&gt; [Ljava.lang.String; plugininstanceid plugintypeid java.lang.String
+ true java.lang.Boolean b86cd4c0-a822-451b-bb45-7fd09a87b8ba java.lang.String com.joaomgcd.autoremote.IntentWifiService java.lang.String com.joaomgcd.autoremote com.joaomgcd.autoremote.activity.ActivityConfigWifiService
+<img blockedImageSrc> com.joaomgcd.autoapps.ActivityLaunchApp com.joaomgcd.autoremote
+</body>
+</html>
