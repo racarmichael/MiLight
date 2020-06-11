@@ -1,14 +1,12 @@
 /**
- *  Copyright 2015 SmartThings
  *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License. You may obtain a copy of the License at:
+ *  Device Handler for a MiLight/LimitlessLED/EasyBulb RGBW light bulb (via AutoRemote)
+ *  https://github.com/racarmichael/MiLight
+ *  
+ *  Special thanks to @joshualyon from SharpTools for the code from the original "AutoRemote DTH"
+ *  https://gist.github.com/joshualyon/bd6a42c07715bb24db0a31812d4391ad
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
- *  for the specific language governing permissions and limitations under the License.
+ *  Also a thank you to the SmartThings community for the "Simulated Dimmer Switch" DTH
  *
  */
 
@@ -30,7 +28,8 @@ metadata {
         
         preferences {
             input(name: "deviceIP", type: "string", title:"AutoRemote Device IP Address", description: "", required: true, displayDuringSetup: true)
-            input(name: "customCommand", type: "string", title:"Default Command to Send", description: "ex: {command}=:=on", displayDuringSetup: true)
+            input(name: "customCommand", type: "string", title:"Device Name", description: "ex: {Group}_{DeviceName}=:=0000", displayDuringSetup: true)
+            input(name: "groupNum", type: "string", title:"Group Number", description: "ex: 1,2,3, or 4 - 0 for all", displayDuringSetup: true)
         }
     }
     
@@ -151,7 +150,11 @@ def off() {
     sendEvent(name: "switch", value: "turning off")
     sendEvent(name: "switch", value: "off")
     //WHITE
-sendCustomCommand("C200")    
+         if (groupNum == "1") sendCustomCommand("4600")
+    else if (groupNum == "2") sendCustomCommand("4800")
+    else if (groupNum == "3") sendCustomCommand("4A00")
+    else if (groupNum == "4") sendCustomCommand("4C00")
+    else    sendCustomCommand("4100") //ALL GROUPS
 }
 
 def setLevel(val){
@@ -189,7 +192,7 @@ def sendCommandMessage(command, message){
 def sendCustomCommand(command){
     log.debug "Sending default custom command: ${customCommand}=:=${command}"
     
-    sendARCommand("${customCommand}=:=${command}")
+    sendARCommand("GR${groupNum}_${customCommand}=:=${command}")
     
 }
 
