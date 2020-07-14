@@ -163,8 +163,14 @@ def setLevel(val){
     if (val < 0) val = 0
     else if( val > 100) val = 100
     
+    //OFF
+         if (val == 0 && groupNum == "1") sendCustomCommand("4600")
+    else if (val == 0 && groupNum == "2") sendCustomCommand("4800")
+    else if (val == 0 && groupNum == "3") sendCustomCommand("4A00")
+    else if (val == 0 && groupNum == "4") sendCustomCommand("4C00")
+    else if (val == 0) sendCustomCommand("4100") //ALL GROUPS
     //SLOWER
-    if (val < 50) sendCustomCommand("4300")
+    else if (val < 50) sendCustomCommand("4300")
     //FASTER
     else if (val > 50) sendCustomCommand("4400")
     
