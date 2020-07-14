@@ -150,11 +150,12 @@ def off() {
     sendEvent(name: "switch", value: "turning off")
     sendEvent(name: "switch", value: "off")
 
-         if (groupNum == "1") sendCustomCommand("4600")
-    else if (groupNum == "2") sendCustomCommand("4800")
-    else if (groupNum == "3") sendCustomCommand("4A00")
-    else if (groupNum == "4") sendCustomCommand("4C00")
-    else    sendCustomCommand("4100") //ALL GROUPS
+         //WHITE
+         if (groupNum == "1") sendCustomCommand("C500")
+    else if (groupNum == "2") sendCustomCommand("C700")
+    else if (groupNum == "3") sendCustomCommand("C900")
+    else if (groupNum == "4") sendCustomCommand("CB00")
+    else    sendCustomCommand("C200") //ALL GROUPS
 }
 
 def setLevel(val){
@@ -163,12 +164,12 @@ def setLevel(val){
     if (val < 0) val = 0
     else if( val > 100) val = 100
     
-    //WHITE
-         if (val == 100 && groupNum == "1") sendCustomCommand("C500")
-    else if (val == 100 && groupNum == "2") sendCustomCommand("C700")
-    else if (val == 100 && groupNum == "3") sendCustomCommand("C900")
-    else if (val == 100 && groupNum == "4") sendCustomCommand("CB00")
-    else if (val == 100) sendCustomCommand("C200") //ALL GROUPS
+    //OFF
+         if (val == 1 && groupNum == "1") sendCustomCommand("4600")
+    else if (val == 1 && groupNum == "2") sendCustomCommand("4800")
+    else if (val == 1 && groupNum == "3") sendCustomCommand("4A00")
+    else if (val == 1 && groupNum == "4") sendCustomCommand("4C00")
+    else if (val == 1) sendCustomCommand("4100") //ALL GROUPS
     //SLOWER
     else if (val < 50) sendCustomCommand("4300")
     //FASTER
