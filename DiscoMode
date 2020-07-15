@@ -20,7 +20,8 @@ metadata {
     ocfDeviceType: " oic.d.light "
     ) {
         capability "Switch"
-        capability "Switch Level" 
+        capability "Switch Level"
+        capability "Thermostat Mode"
         command "statusOn"
         command "statusOff"
         command "sendCommand", ["string"]
@@ -34,7 +35,7 @@ metadata {
     }
     
     //Icons (http://htmlpreview.github.io/?https://github.com/krlaframboise/Resources/blob/master/SmartThings-Icons.html)
-
+    
     tiles {
         standardTile("switch", "device.switch", width: 2, height: 2, canChangeIcon: true) {
         
@@ -84,7 +85,7 @@ metadata {
 		standardTile("off", "device.off", width:1, height:1, decoration: "flat") {
 			state("off", action: "switch.on", 
             //ON ICON
-            icon: "st.Entertainment.entertainment7")
+            icon: "st.Entertainment.entertainment3")
 			state "false", label: ''
 		}
         
@@ -140,16 +141,23 @@ def statusOff(){
 
 
 def on() {
-    sendEvent(name: "switch", value: "turning on")
+    sendEvent(name: "switch", value: "Next Disco Mode")
     sendEvent(name: "switch", value: "on")
     //ALSO NEXT DISCO MODE
 sendCustomCommand("4D00")
 }
 
 def off() {
-    sendEvent(name: "switch", value: "turning off")
+    sendEvent(name: "switch", value: "White")
     sendEvent(name: "switch", value: "off")
 
+         //ON
+             if (groupNum == "1") sendCustomCommand("4500")
+    else if (groupNum == "2") sendCustomCommand("4700")
+    else if (groupNum == "3") sendCustomCommand("4900")
+    else if (groupNum == "4") sendCustomCommand("4B00")
+    else    sendCustomCommand("4200") //ALL GROUPS
+         
          //WHITE
          if (groupNum == "1") sendCustomCommand("C500")
     else if (groupNum == "2") sendCustomCommand("C700")
@@ -164,13 +172,15 @@ def setLevel(val){
     if (val < 0) val = 0
     else if( val > 100) val = 100
     
-    //OFF
+  //OFF
          if (val == 1 && groupNum == "1") sendCustomCommand("4600")
     else if (val == 1 && groupNum == "2") sendCustomCommand("4800")
     else if (val == 1 && groupNum == "3") sendCustomCommand("4A00")
     else if (val == 1 && groupNum == "4") sendCustomCommand("4C00")
     else if (val == 1) sendCustomCommand("4100") //ALL GROUPS
-    //SLOWER
+
+
+//SLOWER
     else if (val < 50) sendCustomCommand("4300")
     //FASTER
     else if (val > 50) sendCustomCommand("4400")
@@ -182,9 +192,6 @@ def setLevel(val){
 
     sendEvent(name: "level", value: val)    
     }
-
-
-
 
 def sendCommand(command){
     log.debug "Sending command: ${command}"
